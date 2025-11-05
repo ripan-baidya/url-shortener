@@ -6,59 +6,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - Linkify</title>
     <style>
         body {
-            background: #f3f4f6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             font-family: "Inter", system-ui, sans-serif;
         }
+
         .login-wrapper {
-            min-height: 70vh;
+            min-height: 75vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            animation: fadeIn 0.6s ease-out;
         }
+
         .card {
             border: none;
-            border-radius: 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.6s ease-out;
         }
+
         .card-header {
-            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-radius: 1rem 1rem 0 0;
+            border-radius: 0;
             text-align: center;
-            padding: 1.5rem;
+            padding: 2.5rem 2rem;
+            position: relative;
+            overflow: hidden;
         }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         .card-title {
-            font-size: 1.5rem;
+            font-size: 2rem;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .card-title::before {
+            content: '🔐';
+            font-size: 2.25rem;
+        }
+
+        .card-body {
+            background: white;
+            padding: 2.5rem 2rem;
+        }
+
+        .form-label {
             font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+
+        .form-label i {
+            color: #667eea;
+        }
+
         .form-control {
-            border-radius: 0.5rem;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
-            border: none;
-            border-radius: 0.5rem;
-            padding: 0.6rem 1.2rem;
-            font-weight: 500;
+            border-radius: 0.75rem;
+            border: 2px solid #e5e7eb;
+            padding: 0.875rem 1.25rem;
             transition: all 0.3s ease;
+            font-size: 1rem;
         }
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #1e40af, #2563eb);
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+            outline: none;
             transform: translateY(-2px);
         }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.875rem 1.5rem;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #6941a0 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
         .alert {
             border-radius: 0.75rem;
+            border: none;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: shake 0.5s ease;
         }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .alert-danger::before {
+            content: '⚠️';
+            font-size: 1.5rem;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+
+        .alert-success::before {
+            content: '✓';
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #10b981;
+        }
+
         a {
-            color: #2563eb;
+            color: #667eea;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
         }
+
+        a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #667eea;
+            transition: width 0.3s ease;
+        }
+
         a:hover {
-            text-decoration: underline;
+            color: #5568d3;
+        }
+
+        a:hover::after {
+            width: 100%;
+        }
+
+        .register-prompt {
+            text-align: center;
+            padding: 1.5rem 0 0 0;
+            border-top: 2px solid #f3f4f6;
+            margin-top: 1.5rem;
+        }
+
+        .register-prompt p {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .card-body {
+                padding: 2rem 1.5rem;
+            }
+
+            .card-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .card-title {
+                font-size: 1.75rem;
+            }
         }
     </style>
 </head>
@@ -70,31 +267,40 @@
                 <div class="card-header">
                     <h5 class="card-title mb-0">Login</h5>
                 </div>
-                <div class="card-body p-4">
+                <div class="card-body">
                     <!-- Alerts -->
-                    <div th:if="${param.error}" class="alert alert-danger">
-                        Invalid username or password.
+                    <div th:if="${param.error}" class="alert alert-danger mb-4">
+                        <span>Invalid username or password.</span>
                     </div>
-                    <div th:if="${param.logout}" class="alert alert-success">
-                        You have been logged out.
+                    <div th:if="${param.logout}" class="alert alert-success mb-4">
+                        <span>You have been logged out successfully.</span>
                     </div>
 
                     <!-- Login Form -->
                     <form th:action="@{/login}" method="post">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
+                        <div class="mb-4">
+                            <label for="username" class="form-label">
+                                <i class="bi bi-person-circle"></i>
+                                Username
+                            </label>
                             <input type="text" class="form-control" id="username" name="username" required autofocus>
                         </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
+                        <div class="mb-4">
+                            <label for="password" class="form-label">
+                                <i class="bi bi-lock-fill"></i>
+                                Password
+                            </label>
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            Login
+                        </button>
                     </form>
 
                     <!-- Register Link -->
-                    <div class="mt-4 text-center">
-                        <p class="mb-0">Don’t have an account? <a th:href="@{/register}">Register</a></p>
+                    <div class="register-prompt">
+                        <p class="mb-0">Don't have an account? <a th:href="@{/register}">Register</a></p>
                     </div>
                 </div>
             </div>

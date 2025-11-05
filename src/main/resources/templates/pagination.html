@@ -1,43 +1,152 @@
 <nav th:if="${shortUrls.totalPages > 1}">
-    <ul class="pagination justify-content-center my-4">
+    <style>
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding: 1rem 0;
+        }
+
+        .page-item {
+            list-style: none;
+        }
+
+        .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.75rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .page-link:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .page-item.disabled .page-link {
+            background: #f3f4f6;
+            color: #9ca3af;
+            border-color: #e5e7eb;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .page-item.disabled .page-link:hover {
+            transform: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .page-info {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.625rem 1.5rem;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border: 2px solid #c7d2fe;
+            color: #4338ca;
+            font-weight: 700;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+            white-space: nowrap;
+        }
+
+        .page-info i {
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .pagination {
+                gap: 0.35rem;
+            }
+
+            .page-link {
+                padding: 0.5rem 0.875rem;
+                font-size: 0.875rem;
+            }
+
+            .page-info {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+                width: 100%;
+                justify-content: center;
+                margin: 0.5rem 0;
+            }
+
+            .page-text-short {
+                display: none;
+            }
+        }
+
+        @media (min-width: 577px) {
+            .page-text-long {
+                display: none;
+            }
+        }
+    </style>
+
+    <ul class="pagination my-4">
         <!-- First -->
         <li class="page-item" th:classappend="${shortUrls.isFirst ? 'disabled' : ''}">
-            <a class="page-link rounded-pill px-3 shadow-sm"
+            <a class="page-link"
                th:href="@{/(page=1)}" aria-label="First">
-                « First
+                <i class="bi bi-chevron-double-left"></i>
+                <span class="page-text-long">First</span>
             </a>
         </li>
 
         <!-- Previous -->
         <li class="page-item" th:classappend="${shortUrls.isFirst ? 'disabled' : ''}">
-            <a class="page-link rounded-pill px-3 shadow-sm"
+            <a class="page-link"
                th:href="@{/(page=${shortUrls.pageNumber - 1})}" aria-label="Previous">
-                ‹ Prev
+                <i class="bi bi-chevron-left"></i>
+                <span class="page-text-long">Prev</span>
             </a>
         </li>
 
         <!-- Current Info -->
         <li class="page-item disabled">
-            <span class="page-link rounded-pill bg-light text-dark fw-semibold px-4 border-0">
-                <span th:text="${'Page ' + shortUrls.pageNumber + ' of ' + shortUrls.totalPages + ' • Total: ' + shortUrls.totalElements}">
+            <span class="page-link page-info border-0">
+                <i class="bi bi-file-earmark-text"></i>
+                <span class="page-text-long" th:text="${'Page ' + shortUrls.pageNumber + ' of ' + shortUrls.totalPages + ' • Total: ' + shortUrls.totalElements}">
                     Page 1 of 10 • Total: 200
+                </span>
+                <span class="page-text-short" th:text="${shortUrls.pageNumber + '/' + shortUrls.totalPages}">
+                    1/10
                 </span>
             </span>
         </li>
 
         <!-- Next -->
         <li class="page-item" th:classappend="${shortUrls.isLast ? 'disabled' : ''}">
-            <a class="page-link rounded-pill px-3 shadow-sm"
+            <a class="page-link"
                th:href="@{/(page=${shortUrls.pageNumber + 1})}" aria-label="Next">
-                Next ›
+                <span class="page-text-long">Next</span>
+                <i class="bi bi-chevron-right"></i>
             </a>
         </li>
 
         <!-- Last -->
         <li class="page-item" th:classappend="${shortUrls.isLast ? 'disabled' : ''}">
-            <a class="page-link rounded-pill px-3 shadow-sm"
+            <a class="page-link"
                th:href="@{/(page=${shortUrls.totalPages})}" aria-label="Last">
-                Last »
+                <span class="page-text-long">Last</span>
+                <i class="bi bi-chevron-double-right"></i>
             </a>
         </li>
     </ul>

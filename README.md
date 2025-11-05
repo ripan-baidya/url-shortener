@@ -74,11 +74,11 @@ Url-Shortener/
 ---
 
 ### 📸 Screenshots
-![Home Page](screenshots/home.png)
-![Shorten URL](screenshots/signup.png)
-![Shorten URL](screenshots/login.png)
-![Shorten URL](screenshots/my-urls.png)
-![Shorten URL](screenshots/admin-dashboard.png)
+![Home Page](docs/screenshots/home.png)
+![Shorten URL](docs/screenshots/signup.png)
+![Shorten URL](docs/screenshots/login.png)
+![Shorten URL](docs/screenshots/my-urls.png)
+![Shorten URL](docs/screenshots/admin-dashboard.png)
 
 
 ### 📄 License

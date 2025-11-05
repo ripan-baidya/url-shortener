@@ -6,75 +6,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin Dashboard - Linkify</title>
     <style>
         body {
-            background: #f5f7fb;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             font-family: "Inter", system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
         }
-        .dashboard-header {
-            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+
+        .dashboard-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            margin-bottom: 2rem;
+            padding: 3rem 2.5rem;
+            border-radius: 1.5rem;
+            margin-bottom: 2.5rem;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInDown 0.6s ease-out;
         }
-        .dashboard-header h2 {
+
+        .dashboard-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .dashboard-hero h2 {
+            margin: 0 0 1rem 0;
+            font-weight: 800;
+            font-size: 2.5rem;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-hero h2::before {
+            content: '⚡';
+            font-size: 3rem;
+        }
+
+        .dashboard-hero p {
             margin: 0;
-            font-weight: 700;
+            font-size: 1.15rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+            opacity: 0.95;
         }
-        .card {
-            border: none;
-            border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            animation: fadeIn 0.6s ease-out 0.2s both;
         }
-        table {
-            border-radius: 0.5rem;
+
+        .stat-card {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            position: relative;
             overflow: hidden;
         }
-        thead {
-            background: #f1f5f9;
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
         }
-        th {
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
             font-weight: 600;
-            color: #444;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        td a {
-            color: #2563eb;
-            font-weight: 500;
+
+        .card {
+            border: none;
+            border-radius: 1.25rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8eeff 100%);
+            border: none;
+            padding: 1.75rem 2rem;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-header i {
+            font-size: 1.75rem;
+            color: #667eea;
+        }
+
+        .card-body {
+            padding: 0;
+            background: white;
+        }
+
+        .card-footer {
+            background: #f9fafb;
+            border: none;
+            padding: 1.5rem 2rem;
+        }
+
+        .table-responsive {
+            border-radius: 0;
+        }
+
+        table {
+            margin-bottom: 0;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8eeff 100%);
+        }
+
+        th {
+            font-weight: 700;
+            color: #374151;
+            padding: 1.25rem 1.5rem;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            border: none;
+        }
+
+        td {
+            padding: 1.25rem 1.5rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(90deg, #f9fafb 0%, #f3f4f6 100%);
+            transform: scale(1.01);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .short-url-link {
+            color: #667eea;
             text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+
+        .short-url-link::before {
+            content: '🔗';
+            font-size: 1.1rem;
+        }
+
+        .short-url-link:hover {
+            color: #5568d3;
+            text-decoration: underline;
+            transform: translateX(3px);
+        }
+
+        td a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
         td a:hover {
+            color: #5568d3;
             text-decoration: underline;
         }
+
         .badge {
-            padding: 0.5em 0.75em;
-            font-size: 0.8rem;
             border-radius: 0.5rem;
+            padding: 0.5rem 0.875rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
         }
+
+        .badge.bg-secondary {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+        }
+
+        .badge.bg-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        }
+
+        .badge i {
+            font-size: 1rem;
+        }
+
+        .click-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.375rem 0.75rem;
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: #4338ca;
+        }
+
+        .click-count::before {
+            content: '👆';
+            font-size: 1rem;
+        }
+
         .alert {
-            border-radius: 0.75rem;
+            margin: 2rem 0;
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            color: #3730a3;
+            border-left: 4px solid #667eea;
+        }
+
+        .alert-info::before {
+            content: 'ℹ️';
+            font-size: 1.75rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-hero {
+                padding: 2rem 1.5rem;
+            }
+
+            .dashboard-hero h2 {
+                font-size: 2rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            th, td {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .card-header {
+                padding: 1.25rem 1.5rem;
+            }
+
+            .card-header h3 {
+                font-size: 1.25rem;
+            }
         }
     </style>
 </head>
 <body>
 <div layout:fragment="content" class="container my-5">
 
-    <!-- Header -->
-    <div class="dashboard-header">
-        <h2>Admin Dashboard – All Shortened URLs</h2>
-        <p class="mb-0">Manage and monitor all generated links.</p>
+    <!-- Hero Header -->
+    <div class="dashboard-hero">
+        <h2>Admin Dashboard</h2>
+        <p>Manage and monitor all generated links across the platform</p>
     </div>
 
-    <!-- Table / Empty State -->
-    <div th:if="${shortUrls.data.isEmpty()}" class="alert alert-info text-center">
-        No short URLs found.
+    <!-- Stats Grid (Optional - you can add stats if available) -->
+    <!--
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">🔗</div>
+            <div class="stat-value">1,234</div>
+            <div class="stat-label">Total Links</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value">567</div>
+            <div class="stat-label">Active Users</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">👆</div>
+            <div class="stat-value">12,345</div>
+            <div class="stat-label">Total Clicks</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-value">89%</div>
+            <div class="stat-label">Active Rate</div>
+        </div>
+    </div>
+    -->
+
+    <!-- Empty State -->
+    <div th:if="${shortUrls.data.isEmpty()}" class="alert alert-info">
+        No short URLs found in the system.
     </div>
 
+    <!-- URLs Table -->
     <div th:unless="${shortUrls.data.isEmpty()}" class="card">
-        <div class="card-body p-0">
+        <div class="card-header">
+            <h3>
+                <i class="bi bi-table"></i>
+                All Shortened URLs
+            </h3>
+        </div>
+        <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead>
@@ -84,16 +418,18 @@
                         <th>Created By</th>
                         <th>Created</th>
                         <th>Expires</th>
-                        <th>Private</th>
+                        <th>Privacy</th>
                         <th>Clicks</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="url : ${shortUrls.data}">
                         <td>
-                            <a th:href="@{/s/{key}(key=${url.shortKey})}"
-                               th:text="${baseUrl + '/s/' + url.shortKey}"
-                               target="_blank"></a>
+                            <a th:href="@{/lnk/{key}(key=${url.shortKey})}"
+                               th:text="${'/lnk/' + url.shortKey}"
+                               target="_blank"
+                               class="short-url-link">
+                            </a>
                         </td>
                         <td>
                             <a th:href="${url.originalUrl}"
@@ -104,10 +440,16 @@
                         <td th:text="${#temporals.format(url.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                         <td th:text="${url.expiresAt != null ? #temporals.format(url.expiresAt, 'yyyy-MM-dd HH:mm') : 'Never'}"></td>
                         <td>
-                            <span th:if="${url.private}" class="badge bg-secondary">Private</span>
-                            <span th:unless="${url.private}" class="badge bg-success">Public</span>
+                            <span th:if="${url.private}" class="badge bg-secondary">
+                                <i class="bi bi-lock-fill"></i>Private
+                            </span>
+                            <span th:unless="${url.private}" class="badge bg-success">
+                                <i class="bi bi-globe"></i>Public
+                            </span>
                         </td>
-                        <td th:text="${url.clickCount}"></td>
+                        <td>
+                            <span class="click-count" th:text="${url.clickCount}"></span>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -115,7 +457,7 @@
         </div>
 
         <!-- Pagination -->
-        <div class="card-footer bg-white text-center">
+        <div class="card-footer">
             <div th:insert="~{pagination}"></div>
         </div>
     </div>

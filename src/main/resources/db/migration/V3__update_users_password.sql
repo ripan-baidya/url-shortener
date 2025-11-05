@@ -1,3 +1,2 @@
-UPDATE users SET password = '$2a$10$SsbST3.vTzreL/14Bvuz2eN6/hRWig1XxBnDjqgwZbLNB9nc0C.vS' WHERE email = 'admin@example.com';
-UPDATE users SET password = '$2a$10$jSXFBqBx1MV7SKmbmaLuEO5Fr2/tQ1hRAZSvP/ifcNz8zesqBJudK' WHERE email = 'john.doe@example.com';
-UPDATE users SET password = '$2a$10$B9XaIwuk.usSuotKOpoW8uhLsAEMHb.MW1D4xudabw3qeiHB5p59O' WHERE email = 'jane.smith@example.com';
+UPDATE users SET password = '$2a$10$gcF93/NK4C06ayK7.x7eseuYC6Dpr2mkUgpo6DpyoL3DdXlsw8wf2' WHERE email = 'admin@gmail.com';
+UPDATE users SET password = '$2a$10$JfS2/LXuwFBvt1tivYzDVu6T5h5PtPZxey.wCcmAd2GLJJ0Itel4y' WHERE email = 'john@gmail.com';

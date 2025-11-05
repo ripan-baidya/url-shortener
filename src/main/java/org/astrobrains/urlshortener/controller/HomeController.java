@@ -96,7 +96,7 @@ public class HomeController {
         return "redirect:/";
     }
 
-    @GetMapping("/s/{shortKey}")
+    @GetMapping("/lnk/{shortKey}")
     public String redirectToOriginalUrl(@PathVariable String shortKey) {
         Long userId = securityUtils.getCurrentUserId();
 

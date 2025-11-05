@@ -6,69 +6,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My URLs</title>
+    <title>My URLs - Linkify</title>
     <style>
         body {
-            background: #f9fafb;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             font-family: "Inter", system-ui, sans-serif;
+            min-height: 100vh;
         }
-        h2 {
+
+        .page-header {
             text-align: center;
-            font-weight: 600;
-            margin: 2rem 0;
-            color: #1f2937;
+            margin: 2.5rem 0 2rem 0;
+            animation: fadeInDown 0.6s ease-out;
         }
-        .table-responsive {
+
+        .page-header h2 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-header h2::before {
+            content: '📊';
+            font-size: 2.75rem;
+            -webkit-text-fill-color: initial;
+        }
+
+        .controls-card {
             background: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 1.25rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
             padding: 1.5rem;
-            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            animation: fadeIn 0.6s ease-out;
         }
-        .table {
-            margin-bottom: 0;
-        }
-        .table th {
-            background: #f3f4f6;
+
+        .select-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             font-weight: 600;
             color: #374151;
         }
-        .table td, .table th {
-            vertical-align: middle;
-            padding: 0.9rem;
+
+        .select-info i {
+            font-size: 1.5rem;
+            color: #667eea;
         }
-        .btn-danger {
+
+        .table-responsive {
+            background: white;
+            border-radius: 1.25rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            padding: 0;
+            margin-top: 1rem;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8eeff 100%);
+        }
+
+        .table th {
+            font-weight: 700;
+            color: #374151;
+            padding: 1.25rem 1.5rem;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
             border: none;
-            border-radius: 0.5rem;
-            padding: 0.6rem 1.2rem;
-            font-weight: 500;
-            background: linear-gradient(135deg, #dc2626, #ef4444);
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .table tbody tr {
             transition: all 0.3s ease;
         }
+
+        .table tbody tr:hover {
+            background: linear-gradient(90deg, #f9fafb 0%, #f3f4f6 100%);
+            transform: scale(1.01);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .form-check-input {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            border: 2px solid #d1d5db;
+            transition: all 0.3s ease;
+        }
+
+        .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-check-input:hover {
+            border-color: #667eea;
+        }
+
+        .btn-danger {
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.75rem;
+            font-weight: 600;
+            font-size: 1rem;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         .btn-danger:disabled {
-            background: #fca5a5;
+            background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
             cursor: not-allowed;
+            opacity: 0.6;
+            box-shadow: none;
         }
+
         .btn-danger:hover:not(:disabled) {
-            background: linear-gradient(135deg, #b91c1c, #dc2626);
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
         }
+
+        .btn-danger:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
         .badge {
             border-radius: 0.5rem;
-            padding: 0.4rem 0.7rem;
+            padding: 0.5rem 0.875rem;
             font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
         }
+
+        .badge.bg-secondary {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+        }
+
+        .badge.bg-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        }
+
+        .badge i {
+            font-size: 1rem;
+        }
+
         .alert {
             margin-top: 1rem;
-            border-radius: 0.75rem;
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: fadeIn 0.6s ease-out;
         }
+
+        .alert-info {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            color: #3730a3;
+            border-left: 4px solid #667eea;
+        }
+
+        .alert-info::before {
+            content: 'ℹ️';
+            font-size: 1.75rem;
+        }
+
+        .short-url-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .short-url-link::before {
+            content: '🔗';
+            font-size: 1.1rem;
+        }
+
+        .short-url-link:hover {
+            color: #5568d3;
+            text-decoration: underline;
+        }
+
         a {
-            color: #2563eb;
+            color: #667eea;
             text-decoration: none;
             font-weight: 500;
+            transition: all 0.3s ease;
         }
+
         a:hover {
+            color: #5568d3;
             text-decoration: underline;
+        }
+
+        .click-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.375rem 0.75rem;
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: #4338ca;
+        }
+
+        .click-count::before {
+            content: '👆';
+            font-size: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h2 {
+                font-size: 2rem;
+            }
+
+            .controls-card {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-danger {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .table th, .table td {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
     <script>
@@ -107,57 +345,76 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h2>My Shortened URLs</h2>
+    <div class="page-header">
+        <h2>My Shortened URLs</h2>
+    </div>
 
-    <div th:if="${shortUrls.data.isEmpty()}" class="alert alert-info text-center">
+    <div th:if="${shortUrls.data.isEmpty()}" class="alert alert-info">
         You haven't created any short URLs yet.
     </div>
 
-    <div th:unless="${shortUrls.data.isEmpty()}" class="table-responsive">
+    <div th:unless="${shortUrls.data.isEmpty()}">
         <form id="deleteForm" th:action="@{/delete-urls}" method="post">
-            <div class="mb-3 text-end">
+            <div class="controls-card">
+                <div class="select-info">
+                    <i class="bi bi-check2-square"></i>
+                    <span>Select URLs to delete</span>
+                </div>
                 <button id="deleteSelectedBtn" class="btn btn-danger" disabled>
+                    <i class="bi bi-trash-fill"></i>
                     Delete Selected
                 </button>
             </div>
 
-            <table class="table table-hover align-middle">
-                <thead>
-                <tr>
-                    <th><input type="checkbox" id="selectAll" class="form-check-input"></th>
-                    <th>Short URL</th>
-                    <th>Original URL</th>
-                    <th>Created</th>
-                    <th>Expires</th>
-                    <th>Private</th>
-                    <th>Clicks</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="url : ${shortUrls.data}">
-                    <td>
-                        <input type="checkbox" name="ids" th:value="${url.id}" class="form-check-input url-checkbox">
-                    </td>
-                    <td>
-                        <a th:href="@{/s/{key}(key=${url.shortKey})}"
-                           th:text="${baseUrl + '/s/' + url.shortKey}"
-                           target="_blank"></a>
-                    </td>
-                    <td>
-                        <a th:href="${url.originalUrl}"
-                           th:text="${#strings.abbreviate(url.originalUrl, 50)}"
-                           target="_blank"></a>
-                    </td>
-                    <td th:text="${#temporals.format(url.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
-                    <td th:text="${url.expiresAt != null ? #temporals.format(url.expiresAt, 'yyyy-MM-dd HH:mm') : 'Never'}"></td>
-                    <td>
-                        <span th:if="${url.private}" class="badge bg-secondary">Private</span>
-                        <span th:unless="${url.private}" class="badge bg-success">Public</span>
-                    </td>
-                    <td th:text="${url.clickCount}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" class="form-check-input">
+                        </th>
+                        <th>Short URL</th>
+                        <th>Original URL</th>
+                        <th>Created</th>
+                        <th>Expires</th>
+                        <th>Privacy</th>
+                        <th>Clicks</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="url : ${shortUrls.data}">
+                        <td>
+                            <input type="checkbox" name="ids" th:value="${url.id}" class="form-check-input url-checkbox">
+                        </td>
+                        <td>
+                            <a th:href="@{/lnk/{key}(key=${url.shortKey})}"
+                               th:text="${'/lnk/' + url.shortKey}"
+                               target="_blank"
+                               class="short-url-link">
+                            </a>
+                        </td>
+                        <td>
+                            <a th:href="${url.originalUrl}"
+                               th:text="${#strings.abbreviate(url.originalUrl, 50)}"
+                               target="_blank"></a>
+                        </td>
+                        <td th:text="${#temporals.format(url.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td th:text="${url.expiresAt != null ? #temporals.format(url.expiresAt, 'yyyy-MM-dd HH:mm') : 'Never'}"></td>
+                        <td>
+                            <span th:if="${url.private}" class="badge bg-secondary">
+                                <i class="bi bi-lock-fill"></i>Private
+                            </span>
+                            <span th:unless="${url.private}" class="badge bg-success">
+                                <i class="bi bi-globe"></i>Public
+                            </span>
+                        </td>
+                        <td>
+                            <span class="click-count" th:text="${url.clickCount}"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </form>
 
         <div th:insert="~{pagination}" class="mt-3"></div>

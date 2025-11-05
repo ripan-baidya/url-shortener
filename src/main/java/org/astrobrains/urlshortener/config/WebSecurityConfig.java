@@ -25,7 +25,7 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(registry -> registry
                 .requestMatchers(
                     "/error", "/webjars/**", "/css/**", "/js/**", "/images/**",
-                    "/", "/short-urls", "/s/**", "/register", "/login"
+                    "/", "/short-urls", "/lnk/**", "/register", "/login"
                 ).permitAll()
                 .requestMatchers("/my-urls").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")

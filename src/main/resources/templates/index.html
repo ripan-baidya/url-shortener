@@ -8,202 +8,471 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Linkify | Modern URL Shortener</title>
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
     <style>
         :root {
             --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
             --secondary-color: #3b82f6;
+            --accent-color: #8b5cf6;
             --text-dark: #111827;
             --text-medium: #374151;
             --text-light: #6b7280;
             --bg-light: #f9fafb;
+            --bg-lighter: #ffffff;
             --border-color: #e5e7eb;
-            --card-shadow: 0 4px 18px rgba(0,0,0,0.05);
-            --card-shadow-hover: 0 8px 25px rgba(0,0,0,0.08);
-            --border-radius-lg: 1rem;
-            --border-radius-md: 0.6rem;
+            --success-color: #10b981;
+            --card-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            --card-shadow-hover: 0 12px 35px rgba(0,0,0,0.12);
+            --border-radius-lg: 1.25rem;
+            --border-radius-md: 0.75rem;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            background-color: var(--bg-light);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             color: var(--text-dark);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
         }
 
         h2 {
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 5rem 2rem;
-            border-radius: var(--border-radius-lg);
-            text-align: center;
-            margin-bottom: 3.5rem;
-        }
-        .hero h1 {
-            font-size: 3.5rem;
             font-weight: 800;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.025em;
-        }
-        .hero p {
-            font-size: 1.25rem;
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.9;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
         }
 
-        /* Card & Form Styles */
+        /* Hero Section with Gradient Text */
+        .intro-text {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .intro-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            font-style: italic;
+            display: inline-block;
+            position: relative;
+        }
+
+        .intro-emoji {
+            font-style: normal;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        /* Enhanced Card */
         .card {
-            border: 1px solid var(--border-color);
+            border: none;
             border-radius: var(--border-radius-lg);
             box-shadow: var(--card-shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            background-color: #ffffff;
+            background: linear-gradient(135deg, #ffffff 0%, #fefeff 100%);
+            transition: var(--transition);
+            overflow: hidden;
+            position: relative;
         }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+        }
+
         .card:hover {
-            transform: translateY(-5px);
             box-shadow: var(--card-shadow-hover);
+            transform: translateY(-4px);
         }
+
         .card-header {
-            background-color: transparent;
-            border-bottom: 1px solid var(--border-color);
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             color: var(--text-dark);
-            padding: 1.25rem 1.5rem;
+            padding: 1.75rem 2rem;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8eeff 100%);
+            border-bottom: 2px solid #e0e7ff;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
+
         .card-body {
-            padding: 1.5rem;
+            padding: 2rem;
         }
+
         .form-label {
             font-weight: 600;
             color: var(--text-medium);
             margin-bottom: 0.5rem;
+            font-size: 0.95rem;
         }
+
         .form-control {
             border-radius: var(--border-radius-md);
-            border: 1px solid #d1d5db;
-            padding: 0.75rem 1rem;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            border: 2px solid #e5e7eb;
+            padding: 0.875rem 1.25rem;
+            transition: var(--transition);
+            font-size: 1rem;
         }
+
         .form-control:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
             outline: none;
+            transform: translateY(-2px);
         }
-        .form-check-input:focus {
-             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+
+        .form-check-input {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            border: 2px solid #d1d5db;
         }
+
         .form-check-input:checked {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
 
-        /* Button Styles */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            border-radius: var(--border-radius-md);
-            padding: 0.8rem 1.75rem;
-            font-weight: 600;
-            font-size: 1rem;
-            color: white;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.35);
+        .form-check-label {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            user-select: none;
         }
 
-        /* Table Styles */
+        .form-text {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.35rem;
+        }
+
+        /* Enhanced Button */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            border-radius: var(--border-radius-md);
+            padding: 1rem 2.5rem;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: white;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.75rem;
+        }
+
+        .section-header i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        /* Enhanced Table */
         .table-responsive {
             box-shadow: var(--card-shadow);
             border-radius: var(--border-radius-lg);
-            border: 1px solid var(--border-color);
+            border: none;
             overflow: hidden;
-            background: #fff;
-        }
-        .table {
-            border-collapse: separate;
-            border-spacing: 0;
-            width: 100%;
-        }
-        thead th {
-            background: var(--bg-light);
-            font-weight: 600;
-            color: var(--text-light);
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            border-bottom: 1px solid var(--border-color);
-        }
-        th, td {
-            padding: 1rem 1.25rem;
-            text-align: left;
-            vertical-align: middle;
-        }
-        tbody tr {
-            transition: background-color 0.2s ease;
-        }
-        tbody tr:not(:last-child) {
-            border-bottom: 1px solid var(--border-color);
-        }
-        tbody tr:hover {
-            background-color: #f3f4f6;
+            background: white;
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        /* Alert Styles */
+        .table {
+            margin-bottom: 0;
+        }
+
+        thead th {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8eeff 100%);
+            font-weight: 700;
+            color: var(--text-medium);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            border: none;
+            padding: 1.25rem 1.5rem;
+        }
+
+        tbody td {
+            padding: 1.25rem 1.5rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        tbody tr {
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(90deg, #f9fafb 0%, #f3f4f6 100%);
+            transform: scale(1.01);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Enhanced Alert */
         .alert-info {
             border-radius: var(--border-radius-lg);
-            background-color: #eef2ff;
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
             color: #3730a3;
             font-weight: 500;
-            border: 1px solid #c7d2fe;
+            border: 2px solid #c7d2fe;
             display: flex;
             align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+        }
+
+        .alert-info i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        /* Short URL Copy Section */
+        .short-url-wrapper {
+            display: inline-flex;
+            align-items: center;
             gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #f8f9ff 0%, #eef2ff 100%);
+            border-radius: var(--border-radius-md);
+            transition: var(--transition);
+        }
+
+        .short-url-wrapper:hover {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+        }
+
+        .short-url-link {
+            font-weight: 600;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+            font-family: 'Courier New', monospace;
+        }
+
+        .short-url-link:hover {
+            color: var(--primary-dark);
+            transform: translateX(3px);
+        }
+
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+            gap: 0.4rem;
+            padding: 0.5rem 0.75rem;
+            border: 2px solid #e0e7ff;
+            border-radius: 0.5rem;
+            background: white;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .copy-feedback {
+            position: absolute;
+            top: -2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .copy-btn i {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .intro-text {
+                font-size: 1.75rem;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .btn-primary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .short-url-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            thead th, tbody td {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .intro-text {
+                font-size: 1.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .card-header {
+                font-size: 1.2rem;
+                padding: 1.25rem 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
 <div layout:fragment="content" class="container my-5">
 
-    <div class="hero">
-        <h1>Linkify</h1>
-        <p>Shorten, manage & share links beautifully in seconds 🚀</p>
-    </div>
+    <!-- Intro Text -->
+    <p class="intro-text">
+        <span class="intro-gradient">Shorten, manage & share links beautifully in seconds</span>
+        <span class="intro-emoji"> 🚀</span>
+    </p>
 
+    <!-- Create Link Card -->
     <div class="card mb-5">
         <div class="card-header">
-            Create a New Link
+            <i class="bi bi-link-45deg"></i>
+            <span>Create a New Link</span>
         </div>
         <div class="card-body">
             <form th:action="@{/short-urls}" method="post" th:object="${createShortUrlForm}">
-                <div class="mb-3">
-                    <label for="originalUrl" class="form-label">Original URL</label>
+                <div class="mb-4">
+                    <label for="originalUrl" class="form-label">
+                        <i class="bi bi-globe2"></i> Original URL
+                    </label>
                     <input type="url" class="form-control" id="originalUrl"
                            th:field="*{originalUrl}"
                            placeholder="https://example.com/my-super-long-url-to-shorten" required>
-                    <div class="text-danger mt-1" th:if="${#fields.hasErrors('originalUrl')}"
+                    <div class="text-danger mt-2 fw-semibold" th:if="${#fields.hasErrors('originalUrl')}"
                          th:errors="*{originalUrl}"></div>
                 </div>
 
                 <div sec:authorize="isAuthenticated()">
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="expirationInDays" class="form-label">Expiration (days)</label>
+                        <div class="col-md-6 mb-4">
+                            <label for="expirationInDays" class="form-label">
+                                <i class="bi bi-calendar-event"></i> Expiration (days)
+                            </label>
                             <input type="number" class="form-control" id="expirationInDays"
                                    th:field="*{expirationInDays}" min="1" max="365">
                             <div class="form-text">Leave empty for a permanent link.</div>
@@ -211,32 +480,33 @@
                     </div>
                     <div class="mb-4 form-check">
                         <input type="checkbox" class="form-check-input" id="isPrivate" th:field="*{isPrivate}">
-                        <label class="form-check-label" for="isPrivate">Private link (only you can view in your dashboard)</label>
+                        <label class="form-check-label" for="isPrivate">
+                            <i class="bi bi-lock-fill"></i> Private link (only you can view in your dashboard)
+                        </label>
                     </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic" viewBox="0 0 16 16">
-                        <path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0v1.829Zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707a.5.5 0 0 0 0-.707ZM7.293 4L8 3.293a.5.5 0 1 0-.707-.707L6.586 3.293a.5.5 0 0 0 0 .707l.707.707Zm-3.293 1a.5.5 0 0 0 0 .707l.707.707a.5.5 0 1 0 .707-.707L4.707 5a.5.5 0 0 0-.707 0ZM.843 10.5a.5.5 0 1 0 0-1H2.5a.5.5 0 0 0 0 1H.843ZM15.5 10a.5.5 0 0 0-.5.5v1.657a.5.5 0 0 0 1 0V10.5a.5.5 0 0 0-.5-.5ZM12.707 12l.707.707a.5.5 0 0 0 .707 0l.707-.707a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707 0L12 11.293a.5.5 0 0 0 0 .707Zm-9.192 1.414a.5.5 0 0 0 .707 0l.707-.707a.5.5 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.707.707l.707.707ZM10 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
-                        <path d="M13.232 4.232a.5.5 0 0 1 0 .707l-2.829 2.829a.5.5 0 0 1-.707 0L9 7.061a.5.5 0 0 1 .707-.707l.707.707 2.829-2.829a.5.5 0 0 1 .707 0ZM3.5 13.5a.5.5 0 0 1 0-1H5a.5.5 0 0 1 0 1H3.5Z"/>
-                    </svg>
+                    <i class="bi bi-magic"></i>
                     <span>Shorten URL</span>
                 </button>
             </form>
         </div>
     </div>
 
-    <h2 class="mb-4">Public Links</h2>
+    <!-- Public Links Section -->
+    <div class="section-header">
+        <i class="bi bi-globe"></i>
+        <h2>Public Links</h2>
+    </div>
 
-    <div th:if="${shortUrls.data.isEmpty()}" class="alert alert-info p-3">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-circle-fill flex-shrink-0" viewBox="0 0 16 16">
-            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-        </svg>
+    <div th:if="${shortUrls.data.isEmpty()}" class="alert alert-info">
+        <i class="bi bi-info-circle-fill"></i>
         <span>No public links have been created yet. Be the first!</span>
     </div>
 
     <div th:unless="${shortUrls.data.isEmpty()}" class="table-responsive">
-        <table class="table table-hover align-middle">
+        <table class="table">
             <thead>
             <tr>
                 <th>Short URL</th>
@@ -247,12 +517,23 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="url : ${shortUrls.data}">
+            <tr th:each="url : ${shortUrls.data}" class="short-url-row">
                 <td>
-                    <a th:href="@{/s/{key}(key=${url.shortKey})}"
-                       th:text="${baseUrl + '/s/' + url.shortKey}"
-                       target="_blank" class="text-primary fw-semibold text-decoration-none"></a>
+                    <div class="short-url-wrapper">
+                        <button type="button"
+                                class="copy-btn"
+                                onclick="copyToClipboard(this)">
+                            <i class="bi bi-clipboard"></i>
+                            <span class="copy-feedback">Copied!</span>
+                        </button>
+                        <a th:href="@{/lnk/{key}(key=${url.shortKey})}"
+                           th:text="${'/lnk/' + url.shortKey}"
+                           target="_blank"
+                           class="short-url-link">
+                        </a>
+                    </div>
                 </td>
+
                 <td>
                     <a th:href="${url.originalUrl}"
                        th:text="${#strings.abbreviate(url.originalUrl, 50)}"
@@ -267,7 +548,31 @@
 
         <div th:insert="~{pagination}" class="p-3 bg-light"></div>
     </div>
-
 </div>
+<div layout:fragment="scripts">
+    <script>
+        function copyToClipboard(button) {
+            const anchor = button.nextElementSibling;
+            if (!anchor || !anchor.getAttribute("href")) {
+                console.warn("No link found to copy.");
+                return;
+            }
+
+            const shortPath = anchor.getAttribute("href");
+            const fullUrl = window.location.origin + shortPath;
+
+            navigator.clipboard.writeText(fullUrl).then(() => {
+                const feedback = button.querySelector('.copy-feedback');
+                if (feedback) {
+                    feedback.style.opacity = '1';
+                    setTimeout(() => feedback.style.opacity = '0', 1500);
+                }
+            }).catch(err => {
+                console.error('Copy failed', err);
+            });
+        }
+    </script>
+</div>
+
 </body>
 </html>
